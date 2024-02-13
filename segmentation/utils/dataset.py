@@ -30,24 +30,23 @@ class CustomDataset(Dataset):
             self.img_path = valid_df['img_name'].to_numpy()
             self.mask_path = valid_df['mask_name'].to_numpy()
 
-    # def one_hot_encode(self, gt):
-    #     semantic_map = []
-    #     for colour in self.mask_path:
-    #         equality = np.equal(gt, colour)
-    #         class_map = np.all(equality, axis=-1)
-    #         semantic_map.append(class_map)
-    #     semantic_map = np.stack(semantic_map, axis=-1)
-    #
-    #     return semantic_map
-
     def __len__(self):
         return len(self.img_path)
 
     def __getitem__(self, idx):
-        img = cv2.imread(f'{self.root}/{self.img_path[idx]}')
+        img = cv2.imread(f'{self.root}/images/{self.img_path[idx]}')
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        mask = cv2.imread(f'{self.root}/{self.mask_path[idx]}')
+        mask = cv2.imread(f'{self.root}/labels/{self.mask_path[idx]}', 0)
+        mask[mask == 2] = 1
+        mask[mask == 3] = 2
+        # mask_values = {
+        #     0: 0,
+        #     1: 1,
+        #     2: 1,
+        #     3: 2
+        # }
+        # mask = np.vectorize(mask_values.get)(mask)
 
         if self.transform is not None:
             augmented = self.transform(image=img, mask=mask)
@@ -55,7 +54,8 @@ class CustomDataset(Dataset):
             mask = augmented['mask']
 
         img = img.transpose(2, 0, 1)
-        mask = mask.transpose(2, 0, 1)
+
+        # mask = mask.transpose(2, 0, 1)
 
         return torch.from_numpy(img), torch.from_numpy(mask)
 

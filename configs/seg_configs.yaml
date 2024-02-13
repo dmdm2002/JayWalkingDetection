@@ -1,0 +1,25 @@
+dataset_path: 'D:/Side/2024_Sejoong_Jaywalking/DB/segmentation'
+
+output_ckp: 'D:/Side/2024_Sejoong_Jaywalking/backup/segmentation/ckp'
+output_sample: 'D:/Side/2024_Sejoong_Jaywalking/backup/segmentation/sample'
+output_test: 'D:/Side/2024_Sejoong_Jaywalking/backup/segmentation/test'
+output_log: 'D:/Side/2024_Sejoong_Jaywalking/backup/segmentation/log'
+
+IMG_HEIGHT: 512
+IMG_WIDTH: 512
+
+epoch: 50
+lr: 1e-4
+b1: 0.5
+b2: 0.999
+
+batch_size: 2
+device: 'cuda:0'
+
+do_ckp_load: False
+do_print:  True
+do_sampling:  True
+
+# Handler
+# run_type [0 : train], [1 : test score], [2 : testing output image]
+run_type: 0
